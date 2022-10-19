@@ -1,5 +1,5 @@
 {
-  "name": "@survata/gha.environment-setup",
+  "name": "@survata/gha.repo-tagger",
   "version": "1.0.0",
   "main": "./dist/index.js",
   "author": "Christopher Baldwin <cbaldwin@upave.com>",
@@ -12,7 +12,8 @@
   "dependencies": {
     "@actions/core": "^1.8.2",
     "@actions/github": "^5.0.3",
-    "@aws-sdk/client-ssm": "^3.95.0"
+    "@aws-sdk/client-ssm": "^3.95.0",
+    "commander": "^9.4.1"
   },
   "devDependencies": {
     "@types/jest": "^27.5.1",

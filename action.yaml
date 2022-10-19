@@ -1,0 +1,9 @@
+name: 'Repository Tagger'
+description: 'GitHub action for tagging repositories'
+inputs:
+  mode:
+    description: 'The action mode [tag|list]'
+    required: true
+runs:
+  using: 'node16'
+  main: 'bin/index.js'
