@@ -81,6 +81,6 @@ async function runTag(args: ActionArgs) {
     //   commit(nextTag);
     // }
 
-    core.exportVariable('DEPLOY_VERSION', nextTag);
+    core.exportVariable('DEPLOY_VERSION', nextTag.toString());
     core.info(`exported variable DEPLOY_VERSION=${nextTag}`);
 }
