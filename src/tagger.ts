@@ -31,7 +31,6 @@ function execCommand(command: string): string {
  * @returns {string} - the current tag
  */
 export function getPriorTag(prefix: string, versionOnly: boolean = false): string {
-    console.log(`prefix = [${prefix}]`)
     let priorTag: string = execCommand(
         `git tag -l ${prefix}[0-9][0-9][0-9][0-9].[0-9][0-9][0-9][0-9].[0-9][0-9] --sort=-v:refname | head -n 1`,
     );

@@ -80,7 +80,6 @@ async function runTag(args: ActionArgs) {
     // if (options.commit) {
     //   commit(nextTag);
     // }
-    console.log(nextTag.toString());
 
     core.exportVariable('DEPLOY_VERSION', nextTag);
     core.info(`exported variable DEPLOY_VERSION=${nextTag}`);

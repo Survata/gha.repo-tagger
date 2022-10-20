@@ -30,5 +30,5 @@ export enum ActionMode {
 }
 
 export function NewActionMode(source: string): ActionMode {
-    return ActionMode[source as keyof typeof ActionMode];
+    return ActionMode[source.toUpperCase() as keyof typeof ActionMode];
 }
