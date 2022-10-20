@@ -6157,7 +6157,7 @@ var ActionMode;
     ActionMode[ActionMode["TAG"] = 1] = "TAG";
 })(ActionMode || (ActionMode = {}));
 function NewActionMode(source) {
-    return ActionMode[source];
+    return ActionMode[source.toUpperCase()];
 }
 
 // EXTERNAL MODULE: ./node_modules/commander/index.js
@@ -6303,7 +6303,6 @@ function execCommand(command) {
  * @returns {string} - the current tag
  */
 function getPriorTag(prefix, versionOnly = false) {
-    console.log(`prefix = [${prefix}]`);
     let priorTag = execCommand(`git tag -l ${prefix}[0-9][0-9][0-9][0-9].[0-9][0-9][0-9][0-9].[0-9][0-9] --sort=-v:refname | head -n 1`);
     if (versionOnly) {
         priorTag = priorTag.replace(prefix, '');
@@ -6399,7 +6398,6 @@ async function runTag(args) {
     // if (options.commit) {
     //   commit(nextTag);
     // }
-    console.log(nextTag.toString());
     core.exportVariable('DEPLOY_VERSION', nextTag);
     core.info(`exported variable DEPLOY_VERSION=${nextTag}`);
 }
