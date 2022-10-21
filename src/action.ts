@@ -4,7 +4,7 @@
 
 import { ActionArgs, ActionMode } from './actionArgs';
 import * as core from '@actions/core';
-import { Command, Option } from 'commander';
+// import { Command, Option } from 'commander';
 import {formatPrefix, getNextTag, getPriorTag} from "./tagger";
 
 export namespace Action {
@@ -13,35 +13,35 @@ export namespace Action {
      *
      * @param program
      */
-    export function setupCommand(program: Command) {
-        const prefixOption: Option = new Option('-p, --prefix <prefix>', 'optional tag prefix');
-
-        program.name('repo-tagger').version('1.0.0', '-v, --version', 'output the current version');
-
-        program
-            .command('list')
-            .description('lists the current tag')
-            .addOption(prefixOption)
-            .action(async (options) => {
-                const args: ActionArgs = {
-                    mode: ActionMode.LIST,
-                    prefix: options.prefix,
-                };
-                await run(args);
-            });
-
-        program
-            .command('tag')
-            .description('creates a new tag')
-            .addOption(prefixOption)
-            .action(async (options) => {
-                const args: ActionArgs = {
-                    mode: ActionMode.TAG,
-                    prefix: options.prefix,
-                };
-                await run(args);
-            });
-    }
+    // export function setupCommand(program: Command) {
+    //     const prefixOption: Option = new Option('-p, --prefix <prefix>', 'optional tag prefix');
+    //
+    //     program.name('repo-tagger').version('1.0.0', '-v, --version', 'output the current version');
+    //
+    //     program
+    //         .command('list')
+    //         .description('lists the current tag')
+    //         .addOption(prefixOption)
+    //         .action(async (options) => {
+    //             const args: ActionArgs = {
+    //                 mode: ActionMode.LIST,
+    //                 prefix: options.prefix,
+    //             };
+    //             await run(args);
+    //         });
+    //
+    //     program
+    //         .command('tag')
+    //         .description('creates a new tag')
+    //         .addOption(prefixOption)
+    //         .action(async (options) => {
+    //             const args: ActionArgs = {
+    //                 mode: ActionMode.TAG,
+    //                 prefix: options.prefix,
+    //             };
+    //             await run(args);
+    //         });
+    // }
 
     /**
      * Runs the action.
