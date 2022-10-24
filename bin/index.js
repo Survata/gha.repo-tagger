@@ -3003,44 +3003,9 @@ function formatPrefix(prefix) {
 
 
 
-// import { Command, Option } from 'commander';
 
 var Action;
 (function (Action) {
-    /**
-     * Sets up the Command.
-     *
-     * @param program
-     */
-    // export function setupCommand(program: Command) {
-    //     const prefixOption: Option = new Option('-p, --prefix <prefix>', 'optional tag prefix');
-    //
-    //     program.name('repo-tagger').version('1.0.0', '-v, --version', 'output the current version');
-    //
-    //     program
-    //         .command('list')
-    //         .description('lists the current tag')
-    //         .addOption(prefixOption)
-    //         .action(async (options) => {
-    //             const args: ActionArgs = {
-    //                 mode: ActionMode.LIST,
-    //                 prefix: options.prefix,
-    //             };
-    //             await run(args);
-    //         });
-    //
-    //     program
-    //         .command('tag')
-    //         .description('creates a new tag')
-    //         .addOption(prefixOption)
-    //         .action(async (options) => {
-    //             const args: ActionArgs = {
-    //                 mode: ActionMode.TAG,
-    //                 prefix: options.prefix,
-    //             };
-    //             await run(args);
-    //         });
-    // }
     /**
      * Runs the action.
      *
@@ -3069,15 +3034,14 @@ var Action;
 async function runList(args) {
     const prefix = formatPrefix(args.prefix);
     let priorTag = getPriorTag(prefix);
-    console.log(priorTag);
+    core.exportVariable('DEPLOY_VERSION', priorTag);
+    core.info(`exported variable DEPLOY_VERSION=${priorTag}`);
 }
 async function runTag(args) {
     const prefix = formatPrefix(args.prefix);
     const priorTag = getPriorTag(prefix);
     const nextTag = getNextTag(priorTag, prefix);
-    // if (options.commit) {
-    //   commit(nextTag);
-    // }
+    commit(nextTag);
     core.exportVariable('DEPLOY_VERSION', nextTag);
     core.info(`exported variable DEPLOY_VERSION=${nextTag}`);
 }
@@ -3085,11 +3049,8 @@ async function runTag(args) {
 ;// CONCATENATED MODULE: ./dist/index.js
 // Copyright (c) 2022 Upwave, All Rights Reserved
 
-// import { Util } from './util';
 
-// import { program } from 'commander';
 
-// if (Util.isTrue(process.env.GITHUB_ACTIONS)) {
 const args = NewActionArgs();
 Action.run(args).then();
 
