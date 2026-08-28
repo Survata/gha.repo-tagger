@@ -12,8 +12,8 @@ Not published to the GitHub Marketplace — any repo with an `action.yaml` at it
 
 - `src/` — TypeScript sources: `index.ts` (entry), `action.ts` (mode dispatch), `tagger.ts` (git operations), `tag.ts` (tag arithmetic), `actionArgs.ts`, `util.ts`, and `*.test.ts`.
 - `bin/index.js` — **committed build artifact**. This is what GitHub Actions executes. Regenerate with `yarn package` after any source or production-dependency change. Never hand-edit.
-- `action.yaml` — action manifest. `using: node20` must match `.nvmrc`.
-- `.nvmrc` — pins Node 20. `nvm use` to activate.
+- `action.yaml` — action manifest. `using: node24` must match `.nvmrc`.
+- `.nvmrc` — pins Node 24. `nvm use` to activate.
 
 ## Build & test
 
@@ -34,7 +34,7 @@ yarn package    # tsc + ncc -> bin/index.js
 
 ## Continuous integration
 
-`.github/workflows/checkCommit.yaml` runs on every push to a non-`master` branch: `yarn install --frozen-lockfile`, `yarn lint`, `yarn test`, `yarn package`. Keep all four green.
+`.github/workflows/checkCommit.yaml` runs on every push to a non-`master` branch. It first enforces that third-party actions are SHA-pinned (`.pinact.yml` plus the pinned-actions guard step; our own `Survata/*` actions are exempt), then runs `yarn install --frozen-lockfile`, `yarn lint`, `yarn test`, `yarn package`, and checks the committed `bin/index.js` is up to date. Keep them all green. Third-party action pins are kept current by a monthly `github-actions` Dependabot config (`.github/dependabot.yml`).
 
 ## Publishing
 

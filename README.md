@@ -35,7 +35,7 @@ All git operations shell out to the `git` CLI in the checked-out workspace, so t
 
 ## Development
 
-Requires Node 20 (see `.nvmrc`).
+Requires Node 24 (see `.nvmrc`).
 
 ```bash
 nvm use
@@ -92,9 +92,11 @@ After your change is merged to `master`:
    git push origin v1.1.0
    ```
 
-### Dependency updates (Dependabot)
+### Dependency updates
 
-Merging a Dependabot PR only updates `package.json` / `yarn.lock`; it does **not** regenerate `bin/index.js`. To actually ship a dependency fix you must rebuild the bundle and move `v1`:
+**GitHub Actions (Dependabot).** [`.github/dependabot.yml`](.github/dependabot.yml) monitors the SHA-pinned actions in `.github/workflows` monthly, grouped into a single PR. Such a PR only bumps a pinned action ref (its SHA and version comment); it does **not** touch `bin/index.js` and does **not** require moving `v1` — merge it like any other CI change.
+
+**npm dependencies (manual).** The bundle's npm dependencies are not tracked by Dependabot version updates here — bump them by hand. Because the shipped artifact is the committed `bin/index.js`, a dependency bump only reaches consumers once the bundle is rebuilt and `v1` is moved:
 
 ```bash
 yarn install && yarn lint && yarn test && yarn package
