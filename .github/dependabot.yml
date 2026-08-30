@@ -1,0 +1,18 @@
+# Dependabot configuration.
+#
+# Monitors the SHA-pinned GitHub Actions in .github/workflows (see .pinact.yml and the
+# pinned-actions guard in checkCommit). Monthly, grouped into a single PR; the cooldown
+# skips releases younger than 14 days. A github-actions PR only bumps a pinned action ref —
+# it never touches the committed bin/index.js bundle and never requires moving the `v1` tag.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    cooldown:
+      default-days: 14
+    groups:
+      actions:
+        patterns:
+          - "*"
