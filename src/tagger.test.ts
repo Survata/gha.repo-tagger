@@ -42,12 +42,13 @@ describe('getPriorTag', () => {
         expect(getPriorTag('abc-', true)).toBe('2021.0109.01');
     });
 
-    test('returns "unknown" when the git command fails', () => {
+    test('throws when the git command fails', () => {
+        const gitError = new Error('git not found');
         mockedExecSync.mockImplementation(() => {
-            throw new Error('git not found');
+            throw gitError;
         });
 
-        expect(getPriorTag('')).toBe('unknown');
+        expect(() => getPriorTag('')).toThrow(gitError);
     });
 });
 
@@ -64,6 +65,42 @@ describe('commit', () => {
             'git push origin 2021.0109.02',
             expect.anything(),
         );
+    });
+
+    test('throws and does not attempt the push when creating the tag fails', () => {
+        const tagError = new Error('tag already exists');
+        mockedExecSync.mockImplementationOnce(() => {
+            throw tagError;
+        });
+
+        expect(() => commit('2021.0109.02')).toThrow(tagError);
+        expect(mockedExecSync).toHaveBeenCalledTimes(1);
+        expect(mockedExecSync).toHaveBeenCalledWith('git tag 2021.0109.02', expect.anything());
+        expect(mockedExecSync).not.toHaveBeenCalledWith(
+            'git push origin 2021.0109.02',
+            expect.anything(),
+        );
+    });
+
+    test('propagates the error unchanged when the push fails', () => {
+        const pushError = new Error('failed to push some refs');
+        mockedExecSync
+            .mockReturnValueOnce(Buffer.from(''))
+            .mockImplementationOnce(() => {
+                throw pushError;
+            });
+
+        let caught: unknown;
+        try {
+            commit('2021.0109.02');
+        } catch (e) {
+            caught = e;
+        }
+
+        expect(caught).toBe(pushError);
+        expect(mockedExecSync).toHaveBeenCalledTimes(2);
+        expect(mockedExecSync.mock.calls[0][0]).toBe('git tag 2021.0109.02');
+        expect(mockedExecSync.mock.calls[1][0]).toBe('git push origin 2021.0109.02');
     });
 });
 

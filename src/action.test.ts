@@ -56,4 +56,18 @@ describe('Action.run', () => {
         expect(mockedSetFailed).toHaveBeenCalledWith(boom);
         expect(mockedCommit).not.toHaveBeenCalled();
     });
+
+    test('TAG mode fails and does not export the version when commit fails', async () => {
+        mockedGetPriorTag.mockReturnValue('2021.0109.01');
+        mockedGetNextTag.mockReturnValue('2021.0109.02');
+        const pushError = new Error('failed to push some refs');
+        mockedCommit.mockImplementation(() => {
+            throw pushError;
+        });
+
+        await expect(Action.run({ mode: ActionMode.TAG, prefix: '' })).resolves.toBeUndefined();
+
+        expect(mockedSetFailed).toHaveBeenCalledWith(pushError);
+        expect(mockedExportVariable).not.toHaveBeenCalled();
+    });
 });
