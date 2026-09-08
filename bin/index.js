@@ -3690,6 +3690,22 @@ function execCommand(command) {
     }
 }
 /**
+ * Executes a command, throwing if it fails.
+ *
+ * Unlike {@link execCommand}, a non-zero exit is fatal: the write operations that
+ * create and push a tag must not be silently swallowed. stderr is piped so the
+ * git failure reason is carried on the thrown error.
+ *
+ * @param {string} command - the command to run
+ *
+ * @returns {string} - the command output
+ */
+function execCommandOrThrow(command) {
+    return (0,external_child_process_.execSync)(command, { stdio: ['pipe', 'pipe', 'pipe'] })
+        .toString()
+        .trim();
+}
+/**
  * Gets the prior tag
  *
  * @param {string} prefix - an optional prefix to the tag
@@ -3708,8 +3724,8 @@ function getNextTag(currentTag, prefix) {
     return create(currentTag, prefix).toString();
 }
 function commit(nextTag) {
-    execCommand('git tag ' + nextTag);
-    execCommand('git push origin ' + nextTag);
+    execCommandOrThrow('git tag ' + nextTag);
+    execCommandOrThrow('git push origin ' + nextTag);
 }
 function formatPrefix(prefix) {
     return prefix ? prefix.replace(/ /g, '-').concat('-') : '';
