@@ -3673,34 +3673,17 @@ function leadingZero(val) {
 
 
 /**
- * Executes a command
- *
- * @param {string} command - the command to run
- *
- * @returns {string} - the command output or 'unknown' if the command throws
- */
-function execCommand(command) {
-    try {
-        return (0,external_child_process_.execSync)(command, { stdio: ['pipe', 'pipe', 'ignore'] })
-            .toString()
-            .trim();
-    }
-    catch (ex) {
-        return 'unknown';
-    }
-}
-/**
  * Executes a command, throwing if it fails.
  *
- * Unlike {@link execCommand}, a non-zero exit is fatal: the write operations that
- * create and push a tag must not be silently swallowed. stderr is piped so the
- * git failure reason is carried on the thrown error.
+ * A non-zero exit throws rather than being swallowed, so a failed git operation
+ * fails the action instead of silently continuing. stderr is piped so the git
+ * failure reason is carried on the thrown error.
  *
  * @param {string} command - the command to run
  *
  * @returns {string} - the command output
  */
-function execCommandOrThrow(command) {
+function execCommand(command) {
     return (0,external_child_process_.execSync)(command, { stdio: ['pipe', 'pipe', 'pipe'] })
         .toString()
         .trim();
@@ -3724,8 +3707,8 @@ function getNextTag(currentTag, prefix) {
     return create(currentTag, prefix).toString();
 }
 function commit(nextTag) {
-    execCommandOrThrow('git tag ' + nextTag);
-    execCommandOrThrow('git push origin ' + nextTag);
+    execCommand('git tag ' + nextTag);
+    execCommand('git push origin ' + nextTag);
 }
 function formatPrefix(prefix) {
     return prefix ? prefix.replace(/ /g, '-').concat('-') : '';

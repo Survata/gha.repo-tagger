@@ -6,34 +6,17 @@ import { execSync } from 'child_process';
 import { create } from './tag';
 
 /**
- * Executes a command
- *
- * @param {string} command - the command to run
- *
- * @returns {string} - the command output or 'unknown' if the command throws
- */
-function execCommand(command: string): string {
-    try {
-        return execSync(command, { stdio: ['pipe', 'pipe', 'ignore'] })
-            .toString()
-            .trim();
-    } catch (ex) {
-        return 'unknown';
-    }
-}
-
-/**
  * Executes a command, throwing if it fails.
  *
- * Unlike {@link execCommand}, a non-zero exit is fatal: the write operations that
- * create and push a tag must not be silently swallowed. stderr is piped so the
- * git failure reason is carried on the thrown error.
+ * A non-zero exit throws rather than being swallowed, so a failed git operation
+ * fails the action instead of silently continuing. stderr is piped so the git
+ * failure reason is carried on the thrown error.
  *
  * @param {string} command - the command to run
  *
  * @returns {string} - the command output
  */
-function execCommandOrThrow(command: string): string {
+function execCommand(command: string): string {
     return execSync(command, { stdio: ['pipe', 'pipe', 'pipe'] })
         .toString()
         .trim();
@@ -62,8 +45,8 @@ export function getNextTag(currentTag: string, prefix: string): string {
 }
 
 export function commit(nextTag: string): void {
-    execCommandOrThrow('git tag ' + nextTag);
-    execCommandOrThrow('git push origin ' + nextTag);
+    execCommand('git tag ' + nextTag);
+    execCommand('git push origin ' + nextTag);
 }
 
 export function formatPrefix(prefix: string): string {

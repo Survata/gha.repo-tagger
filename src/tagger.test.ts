@@ -42,12 +42,13 @@ describe('getPriorTag', () => {
         expect(getPriorTag('abc-', true)).toBe('2021.0109.01');
     });
 
-    test('returns "unknown" when the git command fails', () => {
+    test('throws when the git command fails', () => {
+        const gitError = new Error('git not found');
         mockedExecSync.mockImplementation(() => {
-            throw new Error('git not found');
+            throw gitError;
         });
 
-        expect(getPriorTag('')).toBe('unknown');
+        expect(() => getPriorTag('')).toThrow(gitError);
     });
 });
 
